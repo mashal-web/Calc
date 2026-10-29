@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111820">
+<meta name="description" content="CW Engineering scientific calculator and engineering utilities.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+<link rel="icon" href="{{ url_for('static', filename='icons/cw-icon.svg') }}" type="image/svg+xml">
+<title>CW Engineering — Scientific Calculator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand-mark">CW<span>∠</span></div><div class="brand-copy"><strong>CW Engineering</strong><small>SCIENTIFIC CALCULATOR</small></div>
+  <div class="top-actions"><button id="history-toggle" class="icon-btn" aria-label="History">↶</button><button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">◐</button></div>
+</header>
+<main class="app-shell">
+<section class="calculator">
+  <div class="mode-row"><span class="eyebrow">CALCULATION</span><select id="angle-mode" aria-label="Angle mode"><option value="DEG">DEG</option><option value="RAD">RAD</option></select><select id="precision" aria-label="Decimal precision"><option value="6">6 dp</option><option value="10" selected>10 dp</option><option value="15">15 dp</option></select></div>
+  <div class="display">
+    <label for="expression">EXPRESSION</label>
+    <textarea id="expression" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Enter expression…">sin(30)</textarea>
+    <div class="result-line"><span id="status">READY</span><output id="result">0.5</output></div>
+    <div class="result-tools"><button id="copy-expression">Copy expression</button><button id="copy-result">Copy result</button><button id="use-result">Ans</button></div>
+  </div>
+  <div class="keypad" id="keypad">
+    <button class="key utility" data-action="clear">AC</button><button class="key utility" data-action="backspace">DEL</button><button class="key" data-insert="(">(</button><button class="key" data-insert=")">)</button><button class="key operator" data-insert="/">÷</button>
+    <button class="key function" data-insert="sin(">sin</button><button class="key function" data-insert="cos(">cos</button><button class="key function" data-insert="tan(">tan</button><button class="key function" data-insert="sqrt(">√</button><button class="key operator" data-insert="^">xʸ</button>
+    <button class="key function" data-insert="asin(">sin⁻¹</button><button class="key function" data-insert="log10(">log</button><button class="key function" data-insert="ln(">ln</button><button class="key function" data-insert="pi">π</button><button class="key operator" data-insert="*">×</button>
+    <button class="key" data-insert="7">7</button><button class="key" data-insert="8">8</button><button class="key" data-insert="9">9</button><button class="key function" data-insert="!">x!</button><button class="key operator" data-insert="-">−</button>
+    <button class="key" data-insert="4">4</button><button class="key" data-insert="5">5</button><button class="key" data-insert="6">6</button><button class="key function" data-insert="%">%</button><button class="key operator" data-insert="+">+</button>
+    <button class="key" data-insert="1">1</button><button class="key" data-insert="2">2</button><button class="key" data-insert="3">3</button><button class="key" data-insert="e">e</button><button class="key equals" data-action="calculate">=</button>
+    <button class="key wide" data-insert="0">0</button><button class="key" data-insert=".">.</button><button class="key" data-insert="Ans">Ans</button><button class="key operator" data-insert="**2">x²</button>
+  </div>
+  <p class="hint">Enter evaluates the expression · ^ means power · % means percent · sin(30) uses the selected angle mode.</p>
+</section>
+<aside class="tools">
+  <div class="panel-head"><div><span class="eyebrow">ENGINEERING TOOLS</span><h2>Quick modes</h2></div></div>
+  <div class="tabs"><button class="tab active" data-panel="convert-panel">Convert</button><button class="tab" data-panel="equation-panel">Equation</button><button class="tab" data-panel="matrix-panel">Matrix</button><button class="tab" data-panel="stats-panel">Stats</button><button class="tab" data-panel="base-panel">Bases</button></div>
+  <section id="convert-panel" class="tool-panel">
+    <h3>Unit conversion</h3><div class="form-grid"><label>Value<input id="conv-value" type="number" value="100" step="any"></label><label>From<input id="conv-from" value="cm"></label><label>To<input id="conv-to" value="m"></label></div><button class="primary" id="convert-btn">Convert</button><output class="tool-output" id="conv-output">—</output><p class="micro">Examples: m, km, cm, ft, kg, N, kPa, J, W, C, F, K, deg, rad.</p>
+  </section>
+  <section id="equation-panel" class="tool-panel hidden">
+    <h3>Equation solver</h3><label>Equation<input id="equation-input" value="x^2 - 5*x + 6 = 0"></label><button class="primary" id="equation-btn">Solve for x</button><output class="tool-output" id="equation-output">—</output>
+  </section>
+  <section id="matrix-panel" class="tool-panel hidden">
+    <h3>2×2 matrix tools</h3><p class="micro">Enter rows as comma-separated values. Example: 1,2;3,4</p><label>Matrix A<textarea id="matrix-a" rows="2">1,2;3,4</textarea></label><label>Matrix B (for binary operations)<textarea id="matrix-b" rows="2">5,6;7,8</textarea></label><label>Operation<select id="matrix-op"><option value="determinant">Determinant A</option><option value="inverse">Inverse A</option><option value="transpose">Transpose A</option><option value="rank">Rank A</option><option value="add">A + B</option><option value="subtract">A − B</option><option value="multiply">A × B</option></select></label><button class="primary" id="matrix-btn">Calculate</button><output class="tool-output" id="matrix-output">—</output>
+  </section>
+  <section id="stats-panel" class="tool-panel hidden">
+    <h3>Statistics</h3><label>Data values<input id="stats-values" value="2, 4, 4, 4, 5, 5, 7, 9"></label><button class="primary" id="stats-btn">Analyze</button><output class="tool-output" id="stats-output">—</output>
+  </section>
+  <section id="base-panel" class="tool-panel hidden">
+    <h3>Number bases</h3><div class="form-grid"><label>Value<input id="base-value" value="FF"></label><label>From<select id="base-from"><option>16</option><option>10</option><option>2</option><option>8</option></select></label><label>To<select id="base-to"><option>10</option><option>2</option><option>8</option><option>16</option></select></label></div><button class="primary" id="base-btn">Convert base</button><output class="tool-output" id="base-output">—</output>
+  </section>
+  <section id="history-panel" class="history-panel hidden"><div class="panel-head"><h2>History</h2><button id="clear-history" class="text-btn">Clear</button></div><div id="history-list" class="history-list"><p class="micro">No calculations yet.</p></div></section>
+  <footer>Created by <strong>Mashal Khan</strong><span>Verify safety-critical engineering results independently.</span></footer>
+</aside>
+</main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js").catch(() => {}));
+}
+</script>
+</body></html>
