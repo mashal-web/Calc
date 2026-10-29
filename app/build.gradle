@@ -17,7 +17,7 @@ android {
         // Chaquopy requires explicit ABI filters for the Python runtime.
         // Include the two common Android phone architectures.
         ndk {
-            abiFilters 'arm64-v8a', 'armeabi-v7a'
+            abiFilters 'arm64-v8a'
         }
 
         python {
